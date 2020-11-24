@@ -570,20 +570,10 @@ def check_link(
     # Check if the Post is Valid/Exists
     try:
         post_page = browser.execute_script(
-            "return window.__additionalData[Object.keys(window.__additionalData)[0]].data"
+            "return window._sharedData.entry_data.PostPage[0]"
         )
-
     except WebDriverException:  # handle the possible `entry_data` error
-        try:
-            browser.execute_script("location.reload()")
-            update_activity(browser, state=None)
-
-            post_page = browser.execute_script(
-                "return window._sharedData.entry_data.PostPage[0]"
-            )
-
-        except WebDriverException:
-            post_page = None
+        post_page = None
 
     if post_page is None:
         logger.warning("Unavailable Page: {}".format(post_link.encode("utf-8")))
